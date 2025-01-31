@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container mt-3"> 
+    <h1 class="title">Add task</h1> 
+    <form method="post"> 
+        {% csrf_token %} 
+        {{ form.as_p }} 
+        <button type="submit" class="btn btn-success">Зберегти</button> 
+    </form>
+</div>
+
+<style>
+    .title{
+        margin-top: 7.5%;
+        text-align: center;
+    }
+    form{
+        width: 60%;
+        margin-left: 22.5%;
+    }
+    label{
+        font-size: 25px;
+        font-style: bold;
+    }
+    
+    textarea, input, select{
+        float: right;
+        height: 40px;
+        width: 35%;
+        padding: 5px;
+        margin-left: 25%;
+        border-radius: 10px;
+        border: solid;
+        border-color: black;
+    }
+    
+    button{
+        margin-left: 40%;
+    }
+</style>
+
+{% endblock content %}

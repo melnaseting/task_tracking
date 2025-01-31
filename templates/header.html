@@ -1,0 +1,35 @@
+<div class="header">
+  <a href="{% url 'task_traker:task_list' %}" class="home" >
+    <img class="logo_home" src="https://upload.wikimedia.org/wikipedia/commons/6/66/Home_icon_blue-1.png">
+    <div class="a">
+      <span class="home_link">Home</span>
+    </div>
+  </a>
+</div>
+<style>
+  .header{
+    display: block;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+  }
+  .home{
+    width: 150px;
+    margin: 25px;
+    display: flex;
+    background-color: rgb(53, 23, 72);
+  }
+  .logo_home{
+    width: 50px;
+    height: 50px;
+  }
+  .a{
+    margin-top: 10px;
+    margin-left: 10px;
+  }
+  .home_link{
+    
+    color: white;
+    font-size: 25px;
+  }
+</style>

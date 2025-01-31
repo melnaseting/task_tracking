@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container"> 
+    <h1></h1> 
+    <p></p> 
+     
+
+    <div class="card">
+        <div class="card-header">
+           <h1> {{ task.title }}</h1>
+        </div>
+        <div class="card-body">
+          <h2 class="card-title">{{ task.description}}</h2>
+          <p>Status: <span class="badge span">{{ task.status }}</span></p> 
+          <p>Priority: <span class="badge span">{{ task.priority }}</span></p>
+          <p>Deadline: <span class="badge span">{{ task.dead_line }}</span></p>
+          <a href="{% url 'task_traker:task_update' task.pk %}" class="btn btn-warning">Edit</a> 
+          <a href="{% url 'task_traker:task_delete' task.pk %}" class="btn btn-danger">Delete</a> 
+        </div>
+      </div>
+</div>
+
+<style>
+    .card{
+        background-color: rgb(64, 42, 77);
+        color: white;
+    }
+    .container{
+        padding-top: 100px;
+    }
+    h1{
+        font-size: 45px;
+    }
+    p{
+        font-size: 30px;
+    }
+    .span{
+        font-size: 25px;
+    }
+    .btn{
+        margin-right: 1.5%;
+    }
+</style>
+
+{% endblock content %}

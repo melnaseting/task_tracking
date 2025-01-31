@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <div class="head">
+      <h1 class="title">My tasks</h1>
+      <div class="add_btn_div"><a class="btn btn-success" href="{% url 'task_traker:add_task' %}" role="button">Add task</a></div>
+    </div>
+    <br>    <br>
+    <ul class="list-group">
+    {% for task in task_list %}
+      
+        <li class="list-group-item li">
+            <a href="{% url 'task_traker:task_detales' task.pk %}">
+              <div>
+                <span class="title_task">{{ task.title }}</span> 
+                <span class="badge rounded-pill text-bg-info">{{ task.get_status_display }}</span>
+                <span class="badge rounded-pill text-bg-secondary">{{ task.get_priority_display }}</span>
+                <span class="badge text-bg-dark   dead_line">{{ task.dead_line }}</span>
+              </div>
+              <div>
+                <form class="mark_done" action="{% url 'task_traker:task_complete' task.pk %}" method="post"> 
+                  {% csrf_token %} 
+                  <button type="submit" class="btn btn-outline-primary">Mark as done</button> 
+                </form>
+              </div>
+            </a>
+          
+        </li>
+      
+    {% endfor %}
+  </ul>
+</div>
+
+<style>
+  .li{
+    background-color: rgb(64, 42, 77);
+    color: white;
+  }
+  .head{
+    display: flex;
+  }
+  .add_btn_div{
+    margin-top: 10px;
+    margin-left: 70.5%;
+  }
+  .container{
+    padding:50px 125px 0 125px;
+  }
+  .dead_line{
+    padding: 6px;
+    float: right;
+    margin-top: 5px;
+    margin-right: 5%;
+  }
+  .title_task{
+    margin-right: 25px;
+  }
+  .mark_done{
+    float: left;
+    margin-top: 10px;
+  }
+  
+</style>
+
+{% endblock content %}
