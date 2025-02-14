@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="container">
+        <h1 class="welcoming">Welcome to our Task Tracking system <br>To continue register or log in</h1>
+    <div>
+        <a href="register/" class="register">Register</a>
+        <a href="log-in/" class="log-in">Log In</a>
+    </div>
+    </div>
+<style>
+    .welcoming{
+        text-align: center;
+    }
+    div{
+        margin-top: 100px;
+        text-align: center;
+    }
+    .register{
+        margin: 10% 0 10% 10%;
+        border-radius: 10px;
+        color: white;
+        text-decoration: none;
+        background-color: rgb(48, 149, 102);
+        padding: 20px;
+    }
+    .register:hover{
+        padding: 21px;
+    }
+    .log-in{
+        margin: 10%;
+        border-radius: 10px;
+        color: white;
+        text-decoration: none;
+        background-color: rgb(48, 149, 102);
+        padding: 20px;
+    }
+
+    .log-in:hover{
+        padding: 21px;
+    }
+</style>
+{% endblock %}

@@ -20,6 +20,7 @@ from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('',include('auth_system.urls')),
     path('tasks/',include('task_traker.urls')),
     path('acconts/login/', auth_views.LoginView.as_view,name="login")
 ]

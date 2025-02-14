@@ -5,5 +5,5 @@ class UserIsOwnerMixin(object):
     def dispatch(self, request, *args, **kwargs): 
         instance = self.get_object() 
         if instance.created_by != self.request.user: 
-            raise PermissionDenied 
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)

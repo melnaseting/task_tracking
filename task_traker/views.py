@@ -5,13 +5,36 @@ from django.views.generic import ListView, CreateView, DetailView , View , Updat
 from  .mixins import UserIsOwnerMixin
 from django.http import HttpResponseRedirect
 from . import models,forms
+from django.db.models import Q
+from django.contrib.auth.models import User
 
 # Create your views here.
-class TaskListView(ListView):
+class TaskListView(LoginRequiredMixin, ListView):
     model = models.Task
     template_name = 'task_traker/task_list.html'
     context_object_name = 'task_list'
-    ordering = ["-created_date"]
+    ordering = '-created_date'
+    
+    def get_queryset(self):
+        queryset = super().get_queryset()
+
+        queryset = queryset.filter(Q(created_by=self.request.user)|Q(executers=self.request.user))
+
+        status = self.request.GET.get("status","")
+        priority = self.request.GET.get("priority","")
+        if status!="all" and priority!='all':
+            queryset = queryset.filter(status=status,priority=priority)
+        elif status=="all" and priority!='all':
+            queryset = queryset.filter(priority=priority)
+        elif priority=="all" and status!="all":
+            queryset = queryset.filter(status=status)
+
+        return queryset
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["form"] = forms.TaskFilterForm(self.request.GET)
+        return context
 
 class TaskCreateViev(LoginRequiredMixin, CreateView):
     model = models.Task
@@ -29,6 +52,22 @@ class TaskDetalesView(DetailView):
     template_name = "task_traker/task_detales.html"
     context_object_name = "task"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["users"]= User.objects.all()
+        return context
+
+class TaskAddExecuterView(LoginRequiredMixin,UserIsOwnerMixin,View):
+    def post(self,request , *args , **kwargs):
+        task = self.get_object()
+        task.executers.add(User.objects.get(kwargs.get('user_id')))
+        task.save()
+        return HttpResponseRedirect(reverse_lazy("task_traker:task_list"))
+    
+    def get_object(self): 
+        task_id = self.kwargs.get('pk') 
+        return get_object_or_404(models.Task, pk=task_id)
+
 class TaskCompleteView(LoginRequiredMixin,UserIsOwnerMixin,View):
     def post(self,request , *args , **kwargs):
         task = self.get_object()
@@ -38,7 +77,7 @@ class TaskCompleteView(LoginRequiredMixin,UserIsOwnerMixin,View):
     
     def get_object(self): 
         task_id = self.kwargs.get('pk') 
-        return get_object_or_404(models. Task, pk=task_id)
+        return get_object_or_404(models.Task, pk=task_id)
     
 class TaskUpdateView(LoginRequiredMixin,UserIsOwnerMixin,UpdateView):
     model = models.Task

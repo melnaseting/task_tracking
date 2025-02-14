@@ -1,15 +1,31 @@
 <div class="header">
-  <a href="{% url 'task_traker:task_list' %}" class="home" >
-    <img class="logo_home" src="https://upload.wikimedia.org/wikipedia/commons/6/66/Home_icon_blue-1.png">
-    <div class="a">
-      <span class="home_link">Home</span>
+  <div>
+    <a href="{% url 'task_traker:task_list' %}" class="home" >
+      <img class="logo_home" src="https://upload.wikimedia.org/wikipedia/commons/6/66/Home_icon_blue-1.png">
+      <div class="a">
+        <span class="home_link">Home</span>
+      </div>
+    </a>
+  </div>
+  <div class="log_out">
+    <div>
+      <p class="badge text-bg-primary username">{{user.username}}</p>
     </div>
-  </a>
+    {% if request.user.is_authenticated %}
+      <form class="log_out_form" action="{% url 'log_out' %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn">
+                <p class="badge text-bg-danger log_out_text">Logout</p>
+          </button>
+      </form>
+    {% endif %}
+  </div>
 </div>
 <style>
   .header{
-    display: block;
-    position: fixed;
+    width: 100%;
+    margin-bottom: 20px;
+    display: flex;
     top: 0px;
     left: 0px;
   }
@@ -17,7 +33,8 @@
     width: 150px;
     margin: 25px;
     display: flex;
-    background-color: rgb(53, 23, 72);
+    flex: 1;
+    background: transparent;
   }
   .logo_home{
     width: 50px;
@@ -28,8 +45,26 @@
     margin-left: 10px;
   }
   .home_link{
-    
     color: white;
     font-size: 25px;
+  }
+  .username{
+    margin-top: 5px;
+    font-size: 25px;
+  }
+  .log_out{
+    height: 100%;
+    display: flex;
+    flex:2;
+    margin-top: 30px;
+    margin-left: 70%;
+    width: 376px;
+  }
+  .log_out_text{
+    font-size: 25px;
+  }
+  .log_out_form{
+    width: 0px;
+    margin-left: 20px;
   }
 </style>
