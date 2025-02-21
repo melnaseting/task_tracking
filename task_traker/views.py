@@ -1,5 +1,5 @@
 from django.shortcuts import render,get_object_or_404
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, CreateView, DetailView , View , UpdateView, DeleteView
 from  .mixins import UserIsOwnerMixin
@@ -46,7 +46,6 @@ class TaskCreateViev(LoginRequiredMixin, CreateView):
         form.instance.created_by = self.request.user
         return super().form_valid(form)
 
-
 class TaskDetalesView(DetailView):
     model = models.Task
     template_name = "task_traker/task_detales.html"
@@ -55,14 +54,29 @@ class TaskDetalesView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["users"]= User.objects.all()
+        context["comments"] = models.Comment.objects.filter(task__pk = context["task"].pk)
+        context["form"] = forms.CommentForm()
         return context
 
+class CommentCreateView(LoginRequiredMixin,CreateView):
+    model = models.Comment()
+    def post(self, request, *args, **kwargs):
+        comment = models.Comment.objects.create(
+            text = request.POST['text'],
+            author = request.user,
+            task = models.Task.objects.get(pk = kwargs['pk']))           
+        return HttpResponseRedirect(reverse("task_traker:task_detales",args=[comment.task.pk]))
+            
 class TaskAddExecuterView(LoginRequiredMixin,UserIsOwnerMixin,View):
     def post(self,request , *args , **kwargs):
         task = self.get_object()
-        task.executers.add(User.objects.get(kwargs.get('user_id')))
+        executer = User.objects.get(id = kwargs.get('user_id'))
+        if executer not in task.executers.all():
+            task.executers.add(executer)
+        else:
+            task.executers.remove(executer)
         task.save()
-        return HttpResponseRedirect(reverse_lazy("task_traker:task_list"))
+        return HttpResponseRedirect(reverse("task_traker:task_detales",args=[task.pk]))
     
     def get_object(self): 
         task_id = self.kwargs.get('pk') 

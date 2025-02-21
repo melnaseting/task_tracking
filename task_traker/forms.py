@@ -1,5 +1,5 @@
 from django import forms
-from .models import Task
+from .models import Task, Comment
 
 class TaskForm(forms.ModelForm):
     class Meta:
@@ -30,3 +30,13 @@ class TaskFilterForm(forms.Form):
         super(TaskFilterForm, self).__init__(*args, **kwargs) 
         for field in self.fields:
             self.fields[field].widget.attrs.update({"class": "form-select form-select-m mb-3"}) 
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['text']    
+
+    def __init__(self, *args, **kwargs): 
+        super(CommentForm, self).__init__(*args, **kwargs) 
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({"class": "form-select form-select-m mb-3 comm_field"}) 

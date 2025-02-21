@@ -25,3 +25,8 @@ class Task(models.Model):
     
     def __str__(self):
         return f"{self.title} created by {self.created_by}"
+
+class Comment(models.Model):
+    text = models.TextField()
+    author = models.ForeignKey(User,on_delete=models.CASCADE)
+    task = models.ForeignKey(Task,on_delete=models.CASCADE)
